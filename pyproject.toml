@@ -11,27 +11,28 @@ authors = [
     { name = "WagtailBlog Team" }
 ]
 dependencies = [
-    # 核心框架版本约束；尚未生成完整依赖锁文件
-    "Django>=5.2.8,<5.3",
-    "wagtail>=8.0,<8.1",
-    "python-dotenv>=1.2.1,<2.0",
-    "Pillow>=12.0.0,<13.0",
-    "django-modelcluster>=6.5,<7.0",
-    "django-taggit>=6.1.0,<7.0",
-    "django-treebeard>=5.2.1,<6.0",
-    "djangorestframework>=3.18.0,<4.0",
+    # 2026-11-01 稳定版基线：直接依赖采用精确版本，减少无计划漂移。
+    "Django==6.1.2",
+    "wagtail==8.0.1",
+    "python-dotenv==1.2.4",
+    "Pillow==13.0.0",
+    "django-modelcluster==6.5",
+    "django-taggit==6.1.0",
+    # Wagtail 8.0.1 要求 django-treebeard>=4.8,<6.0，不能追随 7.x。
+    "django-treebeard==5.3.1",
+    "djangorestframework==3.18.3",
 ]
 
 [project.optional-dependencies]
 # 外部存储与服务驱动（骨架阶段严格保持隔离，未来阶段按需启用）
 services = [
-    "mysqlclient>=2.2.7,<3.0",
-    "pymongo>=4.11.3,<5.0",
-    "redis>=5.2.1,<6.0",
+    "mysqlclient==2.3.0",
+    "pymongo==4.19.0",
+    "redis==8.1.0",
 ]
 test = [
-    "pytest>=8.0",
-    "pytest-django>=4.8",
+    "pytest==9.2.0",
+    "pytest-django==4.14.0",
 ]
 
 [tool.setuptools.packages.find]

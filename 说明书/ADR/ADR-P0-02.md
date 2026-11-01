@@ -1,19 +1,19 @@
 # ADR-P0-02：Python 根包与 AppConfig 所有权
 
 - 日期：2026-10-31
-- 状态：P0-DEV-01 身份 AppConfig 已批准并实现；资源、首页和测试夹具 App 仍为后续候选。
+- 状态：P0-DEV-01 身份 AppConfig 已批准并实现；资源与首页 App 身份已由 U38 确认，测试夹具 App 仍为后续候选。
 - 证据级别：E2 无外部 IO 身份装载已验证；完整迁移图和真实服务尚未验证。
-- 用户批准：身份 AppConfig 方案已批准；独立技术审查：本切片待复核。
+- 用户批准：身份、resources/site_home App 身份已批准；模型装载、迁移图和真实服务仍未验证。
 
 ## 来源与用户已确认
 
-依据旧参考仓库 `说明书/00-产品需求与项目管理/` 的 00、04 U12/U24/U26、08、09 §10.2 和 10 §12～14。独立仓库、最小 AbstractUser 和原生扩展原则已确认；**Python 根包、目录布局、AppConfig 路径没有随仓库名自动获批**。
+依据旧参考仓库 `说明书/00-产品需求与项目管理/` 的 00、04 U12/U24/U26/U37/U38、08、09 §10.2 和 10 §12～14。独立仓库、最小 AbstractUser、`wagtailblog2` 根包及 `resources`/`site_home` App 身份已确认；其余实现和迁移证据仍需门禁验证。
 
-本轮补充批准 P0-DEV-01 的身份 AppConfig 路径；资源、首页、测试夹具 AppConfig 及迁移路线仍未批准。统一采用根 `manage.py` 与 `src/wagtailblog2/` 的文档路径口径，E2 证据仍不等于真实迁移或服务验收。
+本轮补充确认 resources、site_home App 身份和迁移路线 B；测试夹具 AppConfig 仍为后续候选。统一采用根 `manage.py` 与 `src/wagtailblog2/` 的文档路径口径，E2 证据仍不等于真实迁移或服务验收。
 
 ## 当前事实与未验证项
 
-新仓库已有 `src/wagtailblog2/`、最小 settings、启动入口和身份 AppConfig；身份装载已在导入前守卫下验证。资源、首页和测试夹具 AppConfig 尚未实现；打包安装、完整迁移图、真实权限和服务仍未验证。
+新仓库已有 `src/wagtailblog2/`、最小 settings、启动入口和身份 AppConfig；身份装载已在导入前守卫下验证。resources 与 site_home 身份已确认但尚未实现；测试夹具 AppConfig、打包安装、完整迁移图、真实权限和服务仍未验证。
 
 ## 已批准身份实现与后续候选
 
@@ -22,8 +22,8 @@
 | 责任 | AppConfig 类候选 | name 候选 | 持久身份 |
 |---|---|---|---|
 | 认证身份 | `wagtailblog2.apps.identity.apps.IdentityConfig` | `wagtailblog2.apps.identity` | P0-DEV-01 已批准并实现 |
-| 公共资源 | `wagtailblog2.apps.resources.apps.ResourcesConfig` | `wagtailblog2.apps.resources` | 见 ADR-P0-03/04 |
-| 首页 | `wagtailblog2.apps.home.apps.HomeConfig` | `wagtailblog2.apps.home` | 随阶段启用，不提前做全部编排 |
+| 公共资源 | `wagtailblog2.apps.resources.apps.ResourcesConfig` | `wagtailblog2.apps.resources` | U38 已确认身份；见 ADR-P0-03/04 |
+| 首页 | `wagtailblog2.apps.home.apps.HomeConfig` | `wagtailblog2.apps.home` | U38 已确认身份；随阶段启用，不提前做全部编排 |
 | 图片测试夹具 | `wagtailblog2.tests.resource_fixtures.apps.ResourceFixturesConfig` | `wagtailblog2.tests.resource_fixtures` | 仅测试附加 App |
 
 `wagtailblog2.content` 承载 Registry/Access/Selection/Card 等公共协议；`wagtailblog2.content_blocks` 承载公共 Block/渲染组件。没有持久模型时不分配 App label，不为每个 Provider 建 Django App。
@@ -43,7 +43,7 @@
 
 - **推荐** `src/wagtailblog2/`：区分仓库名与导入名，便于隔离旧根包；需同步打包/工具路径，不能只建目录。
 - 备选仓库根平铺包：配置较少，但须另验当前目录遮蔽导入等问题；不能在不同环境混用两套根包。
-- 待批准：根包名、src 布局、四个 AppConfig/name 候选、测试夹具位置，以及顶层 config 的职责。首次生成迁移前应闭合。
+- 待后续确定：测试夹具位置、顶层 config 的职责和 App 的实际装载时机；根包、src 布局、身份、resources/site_home App 身份不再作为待用户选择。
 - 不选整体复制旧 `wagtailblog3`：其历史导入耦合与任务发现不满足新站边界；这是历史源码风险，不声称本批观察到网络连接。
 
 ## 风险与依赖
@@ -52,7 +52,7 @@
 
 ## 验证计划、停止与回退
 
-- E1：静态核对全部候选全限定路径与 ADR-P0-03/06/07 一致；最小骨架已建立，候选业务 AppConfig 尚未实现。
+- E1：静态核对已确认全限定路径与 ADR-P0-03/06/07 一致；最小骨架已建立，resources/site_home AppConfig 尚未实现。
 - E2：在获批实施范围内，项目导入前阻断 DB、网络、Storage、任务和子进程，受守卫检查模块来源、AppConfig.name/label、重复模型/反向关系、ready/hooks/URL/模板/static/Storage/任务发现；不生成或执行迁移、不连真实服务、不开展 E3，禁止靠删必要 App 让测试通过。
 - E3：具体授权后验证打包入口、原生后台及 chooser；无 IO 导入结果不证明这些功能。
 - 停止：根包争议、重复 label、旧包被解析、夹具反向进入生产图或导入发生 IO。

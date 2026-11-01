@@ -32,6 +32,7 @@
 - P0-E2 必须在项目/settings 导入前安装并验证无外部 IO 守卫；普通 `manage.py check`、SQLite、LocMemCache 或未观察到请求，不等于完整 E2。
 - 报告必须区分源码静态、E2 无外部 IO、Mock/隔离服务、浏览器和真实用户态证据；不得把代理口头报告当作主会话验证。
 - 修改后至少执行适用的 UTF-8 文档检查、TOML 解析、Python 语法检查、`manage.py check` 和 `git diff --check`；未获本轮用户授权不得提交本地 Git。
+- `wagtailblog-test` 是新站独占环境；直接 Python 依赖以经过兼容性核对的稳定版精确锁定。后续依赖升级必须作为独立批次同时更新 `pyproject.toml`、测试环境和验证记录，不进行隐式漂移。
 
 ## 增量开发、注释与 Git 交付
 

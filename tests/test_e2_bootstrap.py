@@ -39,6 +39,7 @@ class SkeletonBootstrapTests(unittest.TestCase):
             from django.apps import apps
             from django.conf import settings
             from django.core.management import call_command
+            from django.db import connections
             from django.urls import resolve
 
             configured = importlib.import_module(settings.SETTINGS_MODULE)
@@ -61,8 +62,22 @@ class SkeletonBootstrapTests(unittest.TestCase):
             with patch(
                 "modelsearch.backends.database.sqlite.utils.fts5_available",
                 return_value=False,
+            ), patch.object(
+                # Django 6.1 checks JSONField support by opening a cursor.
+                # This skeleton test must mock the capability instead of
+                # weakening the process-wide database tripwire.
+                type(connections["default"].features),
+                "supports_json_field",
+                True,
             ):
-                call_command("check", verbosity=0, stderr=stderr)
+                # Django 6.1 no longer runs compatibility-tagged checks in
+                # the default command set, so request this warning explicitly.
+                call_command(
+                    "check",
+                    verbosity=0,
+                    stderr=stderr,
+                    tags=["compatibility"],
+                )
             self.assertIn("modelsearch.W003", stderr.getvalue())
 
             # P0-DEV-01 has fixed the identity contract; media models and
@@ -84,8 +99,6 @@ class SkeletonBootstrapTests(unittest.TestCase):
                 ["site_identity.User"],
             )
             self.assertEqual(list((root / "src/wagtailblog2").rglob("migrations")), [])
-            from django.db import connections
-
             self.assertTrue(all(c.connection is None for c in connections.all()))
             self.assertEqual(
                 GUARD.violations, before,

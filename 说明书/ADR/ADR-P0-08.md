@@ -1,15 +1,15 @@
 # ADR-P0-08：公共能力协议、原生编辑权限与基础设施权威边界
 
 - 日期：2026-10-31
-- 状态：已确认需求的合同化提案；方法名/数据结构为项目建议，非 Wagtail 内置 API，尚未实现。
+- 状态：已确认需求与 U38 基础权限合同的合同化提案；方法名/数据结构为项目建议，非 Wagtail 内置 API，尚未实现。
 - 证据级别：E1；无服务、后台动作、发布/删除或跨存储测试结果。
-- 用户批准：产品选择及简化公开交付原则已确认，未覆盖的技术细化合同待审定；独立技术审查：未执行。
+- 用户批准：产品选择、简化公开交付原则、resources/site_home 基础身份和编辑/发布分权基线已确认；未覆盖的技术细化仍待验证。
 
 ## 来源、用户已确认与纠偏
 
 依据旧参考仓库 `说明书/00-产品需求与项目管理/` 的 00、01、02、04 U02～U10/U12/U18～U23/U26、08、09 §5/§7/§8/§14/§15、10 §11～14。公共能力不依赖具体 Blog/Guide，Wagtail 原生 Page Tree/Revision/Workflow/权限是生命周期权威；不开发第二套发布系统、会员支付或在线插件市场。
 
-本轮承接 U27～U36 产品确认；身份 App label 与 `AUTH_USER_MODEL` 已在 P0-DEV-01 获批准，资源 label、模型设置和迁移路线仍待审定。E2 证明与批准分开，授权及验收责任按 ADR-P0-01。
+本轮承接 U27～U36、U38；身份 App label、`AUTH_USER_MODEL`、resources/site_home 基础身份、迁移路线 B 及编辑/发布分权基线已获批准。E2 证明与批准分开，授权及验收责任按 ADR-P0-01。
 
 **F16 修正：GuidePage 首版 body 必须外置 MongoDB，按 U04 和本次明确要求执行；旧 01 的“可外置”不再是有效选择。**Blog body/intro 分字段外置；旧 09 的 body 必填、intro 可显式空建议须与 U27～U36 已确认选择核对，仅未覆盖的字段/空值细则仍待审定，不与外置方向混淆。
 
@@ -46,6 +46,8 @@ Selection 有 **chooser 候选、POST/保存、前台读取** 三道独立检查
 错误区分 NOT_FOUND/UNREGISTERED/UNSUPPORTED（公开结果合并，防枚举）、DENIED、UNKNOWN_ACCESS（拒绝）、UNAVAILABLE/INCONSISTENT_SNAPSHOT（关键正文/权限失败）、INVALID_SELECTION/VERSION_CONFLICT（可修复保存错误，避免部分覆盖）。可选推荐可按约降级，不能退到草稿或旧授权。批量/候选数/页长/外置读取/超时/重试均有预算；具体数值需测量后审定，避免 N+1 和无界补取。
 
 ## Wagtail 原生编辑权限边界
+
+U38 的权限基线为：编辑在授权栏目/对象范围内可修改任意草稿，不限本人创建；编辑与发布权限分离，编辑不能直接发布，审核员按 Workflow、Group、Page Permission 和 Collection 合同负责发布。具体原生入口覆盖、批量操作和直连拒绝仍需 E2/E3 验证。
 
 角色使用原生 Group、树范围 Page Permission、Workflow 与 Collection，不另建 CMS 角色权威。下表是建议配置/测试场景，不代表原生默认已满足。
 

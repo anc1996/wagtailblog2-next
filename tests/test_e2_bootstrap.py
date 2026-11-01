@@ -1,4 +1,4 @@
-"""Guarded skeleton loading only: no project User/media/migration acceptance."""
+"""Guarded project loading only: no media or migration acceptance."""
 
 from tools.e2_no_io_guard import install_no_io_guard
 

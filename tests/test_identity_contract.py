@@ -40,6 +40,11 @@ class IdentityContractTests(unittest.TestCase):
         # are allowed and are excluded from this boundary comparison.
         cls.setup_violations_before = setup_violations_before
         cls.setup_violations_after = GUARD.violations
+        if cls.setup_violations_after != cls.setup_violations_before:
+            raise AssertionError(
+                "Unexpected identity setup IO entries: "
+                f"{GUARD.events[cls.setup_violations_before:]}"
+            )
 
     @classmethod
     def tearDownClass(cls):

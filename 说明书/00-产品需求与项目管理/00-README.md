@@ -57,7 +57,7 @@ P0 按 09 §10.2 分开登记三层证据：E1 为静态设计；E2 为守卫在
 
 长期规则见 [AGENTS.md](../../AGENTS.md)，调度与模型证据见 [代理协议](../../.codex/AGENTS_INTERACTION_PROTOCOL.md) 和 [配置说明](../../.codex/README.md)。产品不绑定某个模型名或全员推理等级。当前 ai-memory 作用域取最近 `.ai-memory.toml`，不沿用旧项目名。
 
-本目录中的 03/05/06/07 已迁入 `说明书/archive-历史原始文档/`，只供追溯，不是新站执行指令。09/10 等方案中的旧仓库分支、旧包路径和旧服务地址均属于历史源码事实；新站当前分支为 `main`，GitHub 远程与基线见上；`wagtailblog2`、`site_identity`、`resources`、`site_home` 的身份按 U37/U38 和 ADR-P0-02/03 已确认，但对应实现、迁移和服务仍须按阶段验收。
+本目录中的 03/05/06/07 已迁入 `说明书/archive-历史原始文档/`，只供追溯，不是新站执行指令。09/10 等方案中的旧仓库分支、旧包路径和旧服务地址均属于历史源码事实；GitHub 远程 `main` 基线见上，本切片在 `chore/p0-git-baseline-doc-sync` feature branch 上交付；`wagtailblog2`、`site_identity`、`resources`、`site_home` 的身份按 U37/U38 和 ADR-P0-02/03 已确认，但对应实现、迁移和服务仍须按阶段验收。
 
 文档、静态检查、Mock、真实数据库/服务、浏览器和真实登录态证据分别登记。模型目录可解析、工具列表出现或子代理返回，都不能单独证明后端模型身份、权限隔离及网站功能完成。
 

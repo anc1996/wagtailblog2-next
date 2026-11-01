@@ -1,0 +1,29 @@
+# WagtailBlog2 仓库级 Codex 声明。
+# 这是可审阅的角色路由配置，不是底层模型、provider、权限隔离或实际调用的证明。
+disable_response_storage = false
+
+[agents]
+enabled = true
+default_subagent_model = "gpt-6.1-sol"
+default_subagent_reasoning_effort = "high"
+
+[agents.terra]
+description = "主代理、项目总监与关键交付门禁负责人"
+config_file = "agents/terra.toml"
+model = "gpt-6.1-terra"
+model_reasoning_effort = "high"
+nickname_candidates = ["TerraReviewer", "TerraAuditor"]
+
+[agents.sol]
+description = "首席架构师，负责 P0 ADR、模型、迁移与公共接口方案"
+config_file = "agents/sol.toml"
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+nickname_candidates = ["SolPlanner", "SolArchitect"]
+
+[agents.gemini]
+description = "工程开发与定向测试代理，限于明确文件和 IO 合同"
+config_file = "agents/gemini.toml"
+model = "gemini-3.8-flash"
+model_reasoning_effort = "high"
+nickname_candidates = ["GeminiCoder", "GeminiTester"]

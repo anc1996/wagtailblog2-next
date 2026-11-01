@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wagtailblog2"
+version = "0.1.0"
+description = "WagtailBlog2 - 独立重建的现代化 Wagtail 内容管理与发布平台骨架"
+requires-python = ">=3.13,<3.14"
+authors = [
+    { name = "WagtailBlog Team" }
+]
+dependencies = [
+    # 核心框架版本约束；尚未生成完整依赖锁文件
+    "Django>=5.2.8,<5.3",
+    "wagtail>=8.0,<8.1",
+    "python-dotenv>=1.2.1,<2.0",
+    "Pillow>=12.0.0,<13.0",
+    "django-modelcluster>=6.5,<7.0",
+    "django-taggit>=6.1.0,<7.0",
+    "django-treebeard>=5.2.1,<6.0",
+    "djangorestframework>=3.18.0,<4.0",
+]
+
+[project.optional-dependencies]
+# 外部存储与服务驱动（骨架阶段严格保持隔离，未来阶段按需启用）
+services = [
+    "mysqlclient>=2.2.7,<3.0",
+    "pymongo>=4.11.3,<5.0",
+    "redis>=5.2.1,<6.0",
+]
+test = [
+    "pytest>=8.0",
+    "pytest-django>=4.8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["wagtailblog2*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "wagtailblog2.settings.dev"
+python_files = ["test_*.py", "*_test.py"]
+testpaths = ["tests"]

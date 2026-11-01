@@ -1,7 +1,7 @@
 # ADR-P0-08：公共能力协议、原生编辑权限与基础设施权威边界
 
 - 日期：2026-10-31
-- 状态：已确认需求与 U38 基础权限合同的合同化提案；方法名/数据结构为项目建议，非 Wagtail 内置 API，尚未实现。
+- 状态：已确认需求与 U38 基础权限合同及 `resources/site_home` 身份的合同化提案；方法名/数据结构为项目建议，非 Wagtail 内置 API，尚未实现。
 - 证据级别：E1；无服务、后台动作、发布/删除或跨存储测试结果。
 - 用户批准：产品选择、简化公开交付原则、resources/site_home 基础身份和编辑/发布分权基线已确认；未覆盖的技术细化仍待验证。
 
@@ -24,7 +24,7 @@
 | 公共搜索/发现 | 正式投影/Outbox 消费、批量资格回查、跨类型发现 | 不读最新草稿，不决定发布，不竞争同一物理索引写入权 |
 | content 公共协议 | Registry/Access/Selection/Card 的类型化契约 | 不导入具体 Blog/Guide、不要求每协议建 App |
 
-装配层注册具体类、具体 Page 的 ParentalKey/Orderable 合法；依赖反转不是万能 JSON 容器或消除所有具体关系。上述逻辑模块的最终 Django App label，除 ADR-P0-03 已列候选外尚未定案。
+装配层注册具体类、具体 Page 的 ParentalKey/Orderable 合法；依赖反转不是万能 JSON 容器或消除所有具体关系。`resources` 与 `site_home` 的持久身份已按 U38 固定；其他逻辑模块的最终 Django App label 仍未在本 ADR 定案。
 
 ## 最小输入/输出合同建议
 

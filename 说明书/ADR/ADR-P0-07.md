@@ -82,3 +82,15 @@ User 初始 + taggit + core Collection 前序 → resources 初始
 - 当前仅审查候选依赖方向：`site_identity.User`、taggit、Wagtail Collection 前序 → `resources` 初始模型；这不是已生成的迁移 DAG。
 - 本切片未创建迁移文件、未运行 MigrationLoader、`makemigrations` 或 `migrate`；第三方 squash/replaces、叶节点、真实状态和首次数据库迁移仍待后续 E2/E3 门禁。
 - 本节覆盖此前“resources App 尚未实现”的当前状态，不覆盖完整迁移图验收。
+
+## P0-DEV-03 实施记录（2026-11-02）
+
+- `HomePage` 采用 Wagtail 原生 `Page` 多表继承；候选 `site_home.0001_initial` 仍须依赖实际核验的原生 Page 迁移前序。
+- 本切片未生成迁移文件、未运行 MigrationLoader 或迁移；自有与第三方完整迁移 DAG 仍未验证。
+- Home 测试在 `django.setup()` 的 Wagtail API schema 构造阶段被 `Discriminator must be used with a Union type` 阻断；因此本轮没有模型注册或迁移图的运行时证据。
+
+### 恢复验证增量（2026-11-02）
+
+- 后续隔离 8.1rc1 测试已证明 Home 模型注册、原生 Page 多表父链接及模型检查；它覆盖上面的“没有模型注册运行证据”，不覆盖正式 8.0.1 的启动阻断或完整迁移 DAG 未验证事实。
+- 候选关系仍为核验后的 `wagtailcore.Page` 迁移前序 → `site_home.0001_initial`；User 初始不得反依赖 Home/Resources。实际依赖节点、squash/replaces、叶节点及状态须在获批迁移图工作中验证，不照抄旧站 `run_before`。
+- U40 API 技术策略不引入新模型、迁移节点或第二套发布/权限权威；本轮没有生成迁移、运行 MigrationLoader、迁移或连接服务。正式版本升级仍需独立批准。

@@ -70,8 +70,9 @@ class SkeletonBootstrapTests(unittest.TestCase):
                 "supports_json_field",
                 True,
             ):
-                # Django 6.1 no longer runs compatibility-tagged checks in
-                # the default command set, so request this warning explicitly.
+                # 先运行默认系统检查；Django 6.1 默认不执行 compatibility
+                # 标签，再单独验证 fallback 警告。两次都保持同一 IO 守卫。
+                call_command("check", verbosity=0, stderr=stderr)
                 call_command(
                     "check",
                     verbosity=0,
@@ -80,9 +81,10 @@ class SkeletonBootstrapTests(unittest.TestCase):
                 )
             self.assertIn("modelsearch.W003", stderr.getvalue())
 
-            # P0-DEV-01 fixed identity, and P0-DEV-02 now loads the resource
-            # model identities. Migrations remain intentionally outside this
-            # slice and are not inferred from successful model loading.
+            # P0-DEV-01 fixed identity; P0-DEV-02 resources and P0-DEV-03
+            # HomePage now load their model identities. Migrations remain
+            # intentionally outside this slice and are not inferred from
+            # successful model loading.
             self.assertEqual(settings.AUTH_USER_MODEL, "site_identity.User")
             self.assertEqual(settings.WAGTAILIMAGES_IMAGE_MODEL, "resources.Image")
             self.assertEqual(settings.WAGTAILDOCS_DOCUMENT_MODEL, "resources.Document")
@@ -96,6 +98,7 @@ class SkeletonBootstrapTests(unittest.TestCase):
                     "wagtailblog2",
                     "wagtailblog2.apps.identity",
                     "wagtailblog2.apps.resources",
+                    "wagtailblog2.apps.home",
                 ],
             )
             self.assertEqual(list(project_apps[0].get_models()), [])
@@ -106,6 +109,10 @@ class SkeletonBootstrapTests(unittest.TestCase):
             self.assertEqual(
                 [model._meta.label for model in project_apps[2].get_models()],
                 ["resources.Image", "resources.Rendition", "resources.Document"],
+            )
+            self.assertEqual(
+                [model._meta.label for model in project_apps[3].get_models()],
+                ["site_home.HomePage"],
             )
             self.assertEqual(list((root / "src/wagtailblog2").rglob("migrations")), [])
             self.assertTrue(all(c.connection is None for c in connections.all()))

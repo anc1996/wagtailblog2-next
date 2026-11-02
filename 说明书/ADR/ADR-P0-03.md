@@ -62,3 +62,15 @@ U27～U36 本身不替代持久身份批准；本轮用户已另行批准 `site_
 - 自定义模型保留 Wagtail 原生 Collection、`site_identity.User` 上传者、taggit、chooser 与字段合同；tag 反向关系使用资源专用名称，避免与 Wagtail 内置具体模型冲突。
 - 当前验证覆盖 App registry、模型 label、实际 Wagtail resolver、关系与约束；ContentType、权限生成和首次迁移仍未执行。
 - 本节覆盖此前“模型实现尚未完成”的当前状态表述；历史候选与未验证边界继续保留。
+
+## P0-DEV-03 实施记录（2026-11-02）
+
+- `site_home.HomePage` 已按已批准身份建立为 `wagtail.models.Page` 的直接子类；不增加独立权限或发布状态。
+- 代码静态结构保留 Wagtail 原生生命周期；由于 `django.setup()` 在 Wagtail API schema 构造阶段失败，实际 App registry、模型检查、Site/Locale 装载和无 IO 装载测试均未通过验证。
+- ContentType、页面权限生成和首次迁移仍未执行；本记录不代表其已验收。
+
+### 恢复验证增量（2026-11-02）
+
+- 本节覆盖上面的首次失败状态：隔离 Wagtail 8.1rc1 下已验证 `site_home.HomePage` 的 App registry、`page_ptr` 指向原生 Page 的一对一主键父链接、模型检查及原生父子类型解析；正式 8.0.1 仍阻断。
+- 测试比较 HomePage 与 Page 的原生生命周期方法身份，不调用保存、发布或删除；没有证明数据库记录或发布行为。ContentType、实际权限和 Site/Locale 数据仍未创建。
+- U40 不改变 `site_identity.User`、`resources`、`site_home` 或原生模型持久身份；API 不成为另一套 CMS 权威。隔离结果与完整 P0 E2/E3 分开登记。

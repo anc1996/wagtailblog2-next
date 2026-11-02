@@ -1,7 +1,7 @@
 # ADR-P0-03：正式 App Label 与持久模型身份
 
 - 日期：2026-10-31
-- 状态：身份标识已批准用于 P0-DEV-01；资源、首页和测试夹具标识仍为候选。
+- 状态：身份标识已批准用于 P0-DEV-01；资源、首页标识已由 U38 确认，测试夹具标识仍为后续候选。
 - 证据级别：E2 无外部 IO 装载已验证；无 ContentType、权限或迁移执行证据。
 - 用户批准：`site_identity.User` 身份方案已确认；独立技术审查：本切片待复核。
 
@@ -9,15 +9,15 @@
 
 依据旧参考仓库 `说明书/00-产品需求与项目管理/` 的 00、04 U17/U24/U26、08、09 §10.1～10.2、10 §12～14。已确认独立仓库及最小 AbstractUser 方向；本切片进一步固定身份 label 和模型标识。资源模型、迁移路线和首次迁移依赖仍需单独审定。
 
-U27～U36 本身不替代持久身份批准；本轮用户已另行批准 `site_identity.User` 作为 P0-DEV-01 身份实现。`resources` 及迁移 B 仍为技术推荐；E2 仅验证装载，不代替迁移或真实权限验收。
+U27～U36 本身不替代持久身份批准；本轮用户已另行批准 `site_identity.User` 作为 P0-DEV-01 身份实现。`resources`、`site_home` 及迁移路线 B 已由 U38 确认；E2 仅验证装载，不代替迁移或真实权限验收。
 
 ## 已批准身份与后续候选 label 清单
 
 | AppConfig（省略共同根 `wagtailblog2`） | label 候选 | 模型标识候选 | 所有权及边界 |
 |---|---|---|---|
 | `.apps.identity.apps.IdentityConfig` | `site_identity` | `site_identity.User` | P0-DEV-01 已批准并实现；首个迁移仍待生成/验证 |
-| `.apps.resources.apps.ResourcesConfig` | `resources` | `resources.Image/Rendition/Document` | 公共资源，不归 Blog；保持旧方案中 resources 候选，不同时安装旧实现 |
-| `.apps.home.apps.HomeConfig` | `site_home` | `site_home.HomePage` | 首页 Page；按阶段实现业务 |
+| `.apps.resources.apps.ResourcesConfig` | `resources` | `resources.Image/Rendition/Document` | 公共资源，不属 Blog；U38 已确认身份，模型实现与迁移依赖仍待验证 |
+| `.apps.home.apps.HomeConfig` | `site_home` | `site_home.HomePage` | U38 已确认首页身份；按阶段实现，不提前初始化真实 Site/Locale |
 | `.tests.resource_fixtures.apps.ResourceFixturesConfig` | `resource_fixtures` | `resource_fixtures.ResourceArticleTestPage`、`resource_fixtures.ResourceGuideTestPage` | 仅图片测试，不是正式 Blog/Guide |
 
 以上 AppConfig.name 以 [ADR-P0-02](ADR-P0-02.md) 的完整路径为准；label 不由包名末段隐式决定。推荐显式声明，以免 identity/home 等通用名称与依赖包冲突。
@@ -44,7 +44,7 @@ U27～U36 本身不替代持久身份批准；本轮用户已另行批准 `site_
 
 ## 待用户批准决定与未验证项
 
-- 批准或调整四个候选 label、对应配置类/模型名及资源/User 设置值；不重复询问已确认的最小 AbstractUser 方向。
+- 测试夹具 `resource_fixtures` 的位置与是否进入测试 settings；不重复询问已确认的 `wagtailblog2`、`site_identity`、`resources`、`site_home` 和最小 AbstractUser 方向。
 - 同意生产图不依赖测试夹具、第三方身份保持原样及后续 label 另审的边界。
 - 未验证：实际 App registry、模型状态、默认表名、ContentType 与权限生成、反向关系、原生 chooser 和各依赖版本兼容性。
 

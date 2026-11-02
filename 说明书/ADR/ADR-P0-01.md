@@ -16,7 +16,7 @@
 
 旧参考仓库为 `F:/openclaw/workspace/wagtail/wagtailblog2-unified-external-content-search`，仅只读引用。以下编号均指其 `说明书/00-产品需求与项目管理/`：00（有效性入口）、01（产品基线 F01～F26）、02（P0～P8）、04（U01～U26）、08（图片首批）、09 §10、10 §12～14。历史审计与旧实现不等于新站验收结果。
 
-本次用户明确指定目标 `F:/openclaw/workspace/wagtail/wagtailblog2-next`，因此旧记录中“新仓库名称、Windows 路径待定”不再适用于此次文档落点；远程地址仍未确认。
+本次用户明确指定目标 `F:/openclaw/workspace/wagtail/wagtailblog2-next`，因此旧记录中“新仓库名称、Windows 路径待定”不再适用于此次文档落点；GitHub 公开远程已确认为 `git@github.com:anc1996/wagtailblog2-next.git`，远程 `main` 基线为 `a49b8b0`；当前文档同步使用 feature branch + PR，不直接推送或强制覆盖 `main`。
 
 ## 用户已确认
 
@@ -30,7 +30,7 @@
 ## 当前本地事实与未验证项
 
 - 当前静态核对已有根 `manage.py`、`src/wagtailblog2/settings/base.py`、`settings/dev.py` 及包内 `urls.py/asgi.py/wsgi.py` 最小骨架；不等于业务 App、模型或完整 E2 已实现，详见 ADR-P0-06。
-- 本批起始只读检查分支为 `main`；未切分支。本 ADR 起草不授权后续在 main 实施代码，父任务应协调实施分支与其他代理修改。
+- 本批起始只读检查分支为 `main`；未切分支；该句仅记录 ADR 起草时的历史状态，已由 P0-OPS-01 的 `chore/p0-git-baseline-doc-sync` 分支流程覆盖。本 ADR 起草不授权后续在 main 实施代码，父任务应协调实施分支与其他代理修改。
 - 旧 10 §13 的历史环境元数据为 Python 3.13.2、Django 5.2.8、Wagtail 8.0、django-modelcluster 6.5、django-treebeard 5.2.1、wagtailmedia 0.18.1。本批未重检，不能宣称为当前锁定版本、最新版本或兼容通过。
 - 新仓库预期 WSL 映射 `/mnt/f/openclaw/workspace/wagtail/wagtailblog2-next` 尚未验证；Conda 分配不证明 WSL 映射、依赖锁和任何基础设施隔离。
 
@@ -49,11 +49,11 @@
 
 P3 才验证外置原生桥，P4 正式内容编排，P5 正式搜索投影；按 02 推进其他阶段。两种资源测试 Page 不等于 BlogPage/GuidePage 已交付；本批不宣布 P0 或 P1 完成。
 
-## 待用户批准决定
+## 待用户批准决定与已覆盖事项
 
 - 历史版本组是否作为起始技术候选及最终锁定策略；需以重新核对后的证据决策。
 - Python 根包、正式 labels、资源模型设置、AUTH_USER_MODEL、独立迁移 B：见 ADR-P0-02～07。
-- 新远程地址及后续实施、依赖变更、真实服务操作的独立授权；不能从本次起草权限推导。
+- GitHub 远程地址已确认；后续实施、依赖变更、真实服务操作仍需按切片取得独立授权，不能从本次文档同步权限推导。
 
 ## 风险与依赖
 

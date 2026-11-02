@@ -83,20 +83,28 @@ class SkeletonBootstrapTests(unittest.TestCase):
             # P0-DEV-01 has fixed the identity contract; media models and
             # migrations remain intentionally outside this slice.
             self.assertEqual(settings.AUTH_USER_MODEL, "site_identity.User")
-            self.assertFalse(hasattr(settings, "WAGTAILIMAGES_IMAGE_MODEL"))
-            self.assertFalse(hasattr(settings, "WAGTAILDOCS_DOCUMENT_MODEL"))
+            self.assertEqual(settings.WAGTAILIMAGES_IMAGE_MODEL, "resources.Image")
+            self.assertEqual(settings.WAGTAILDOCS_DOCUMENT_MODEL, "resources.Document")
             project_apps = [
                 app for app in apps.get_app_configs()
                 if app.name == "wagtailblog2" or app.name.startswith("wagtailblog2.")
             ]
             self.assertEqual(
                 [app.name for app in project_apps],
-                ["wagtailblog2", "wagtailblog2.apps.identity"],
+                [
+                    "wagtailblog2",
+                    "wagtailblog2.apps.identity",
+                    "wagtailblog2.apps.resources",
+                ],
             )
             self.assertEqual(list(project_apps[0].get_models()), [])
             self.assertEqual(
                 [model._meta.label for model in project_apps[1].get_models()],
                 ["site_identity.User"],
+            )
+            self.assertEqual(
+                [model._meta.label for model in project_apps[2].get_models()],
+                ["resources.Image", "resources.Rendition", "resources.Document"],
             )
             self.assertEqual(list((root / "src/wagtailblog2").rglob("migrations")), [])
             self.assertTrue(all(c.connection is None for c in connections.all()))

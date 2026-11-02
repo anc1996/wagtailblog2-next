@@ -57,3 +57,10 @@
 - E3：具体授权后验证打包入口、原生后台及 chooser；无 IO 导入结果不证明这些功能。
 - 停止：根包争议、重复 label、旧包被解析、夹具反向进入生产图或导入发生 IO。
 - 回退检查：未迁移原型可按文件所有权撤回本批改动；持久化后的 Python 路径/label 不随意更名，保留历史可解析入口，另审兼容方案。不执行覆盖 reset 或清理他人文件。
+
+## P0-DEV-02 实施记录（2026-11-02）
+
+- 已实现 `wagtailblog2.apps.resources.ResourcesConfig`，持久 `label=resources`；`resources.Image`、`resources.Rendition`、`resources.Document` 已按 Wagtail 8.0.1 抽象模型建立。
+- 已在 settings 激活 `WAGTAILIMAGES_IMAGE_MODEL="resources.Image"` 与 `WAGTAILDOCS_DOCUMENT_MODEL="resources.Document"`，未引入业务 Page 或旧站资源。
+- 受导入前无外部 IO 守卫的定向装载与模型合同测试已通过；这只证明当前原型装载边界，不证明迁移或真实服务验收。
+- 本节覆盖此前“resources 尚未实现”的当前状态表述；历史记录保留，迁移文件、完整迁移图和 E3 仍未完成。

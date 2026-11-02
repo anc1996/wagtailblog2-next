@@ -2,11 +2,11 @@
 WagtailBlog2 基础共享配置 (base.py).
 
 边界与架构原则 (ADR-P0-01 / ADR-P0-02 / ADR-P0-03 / ADR-P0-05 / ADR-P0-06)：
-1. 仅声明核心 Django 与 Wagtail 必须组件，当前只装载身份模型，不装载业务 Page/媒体模型 App；
+1. 仅声明核心 Django 与 Wagtail 必须组件，装载身份与公共资源模型，不装载业务 Page；
 2. 默认数据库采用本地独立 SQLite 路径 (var/db.sqlite3)，严禁连接旧站/生产 MySQL；
 3. 默认缓存使用 LocMemCache，严禁连接共享 Redis；
 4. 搜索后端使用 Wagtail 原生数据库搜索，严禁连接共享 Elasticsearch；
-5. AUTH_USER_MODEL 已按 P0-DEV-01 固定；资源模型设置继续保持注释占位，待对应阶段批准后激活；
+5. AUTH_USER_MODEL 已按 P0-DEV-01 固定；公共资源模型设置按 P0-DEV-02 激活；
 6. 不在启动阶段导入 Celery，根包保持无副作用纯净性。
 """
 
@@ -46,6 +46,8 @@ INSTALLED_APPS: List[str] = [
     "wagtailblog2.apps.core.Wagtailblog2Config",
     # 稳定身份 App label 与 User 模型合同见 ADR-P0-02/03/05。
     "wagtailblog2.apps.identity.apps.IdentityConfig",
+    # 公共资源持久身份独立于 Blog/Guide，注册不执行外部 IO。
+    "wagtailblog2.apps.resources.apps.ResourcesConfig",
 
     # Wagtail 核心与功能组件 (ADR-P0-06)
     "wagtail.contrib.forms",
@@ -78,13 +80,13 @@ INSTALLED_APPS: List[str] = [
 # 认证与持久模型身份契约 (ADR-P0-03 / ADR-P0-05)
 #
 # 1. P0-DEV-01 已批准并装载最小 AbstractUser；它仍未生成迁移或连接数据库。
-# 2. 资源模型合同尚未在本切片实现；图片/文档模型在 P1/P2a 按批准合同激活。
+# 2. P0-DEV-02 仅激活公共资源最小模型；迁移与真实媒体 IO 仍需另行授权。
 # 3. 身份 App 的持久 label 与 AUTH_USER_MODEL 不得在首次迁移后随意改名。
 # =============================================================================
 # 持久身份合同：首版使用最小 AbstractUser，不附带会员或业务资料字段。
 AUTH_USER_MODEL: str = "site_identity.User"
-# WAGTAILIMAGES_IMAGE_MODEL = "resources.Image"
-# WAGTAILDOCS_DOCUMENT_MODEL = "resources.Document"
+WAGTAILIMAGES_IMAGE_MODEL: str = "resources.Image"
+WAGTAILDOCS_DOCUMENT_MODEL: str = "resources.Document"
 
 # =============================================================================
 # 中间件配置 (MIDDLEWARE)

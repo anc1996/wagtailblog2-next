@@ -58,3 +58,11 @@
 - E3：另获 SQL/对象存储等具体目标授权后，按 08 IMG01～IMG16 验上传、两类 Page 共享、独立 alt、rendition、Revision/恢复、chooser、越权直读、删除保护、预览与撤销、未知结果及失败重交；图片切片不需为无关 Mongo/ES 做全量快照。
 - 停止：资源标识未定、权限未知、当前/历史引用无法保护、对象目标非空且初始化范围不明，或发现旧业务依赖。
 - 回退检查：保留已上传对象与 SQL 引用证据，标记待对账；不得通过删共享对象、Mongo 版本或回滚他人修改来“恢复”。代码回退和数据恢复分别授权。
+
+## P0-DEV-02 实施记录（2026-11-02）
+
+- 已实现公共资源最小模型身份：`resources.Image`、`resources.Rendition`、`resources.Document`；图片和文档业务交付仍分别留在 P1/P2a。
+- `Rendition.image` 指向 `resources.Image`，使用 `related_name="renditions"`、`CASCADE` 和 `image/filter_spec/focal_point_key` 无条件唯一约束。
+- 为兼容 Wagtail 内置具体模型，Image/Document 的 tag 反向关系使用资源专用名称；未建立第二套资源权限或上传系统。
+- 受守卫定向测试和 mock-assisted `manage.py check` 已验证当前模型装载无系统检查错误；未执行迁移、上传、派生图生成或真实资源交付。
+- 本节覆盖此前“模型尚未实现”的当前状态，不能覆盖“完整 E2/E3 未验收”结论。

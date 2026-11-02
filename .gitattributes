@@ -1,0 +1,2 @@
+# unified diff 的空白上下文行需要前导空格；仅对此已测补丁保留，源码检查不变。
+tools/compat/wagtail_8_0_1/wagtail-8.0.1-api-v3-startup-v2.patch whitespace=-blank-at-eol

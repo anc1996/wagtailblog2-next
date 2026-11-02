@@ -1,0 +1,135 @@
+--- a/wagtail/contrib/redirects/apps.py
++++ b/wagtail/contrib/redirects/apps.py
+@@ -1,4 +1,4 @@
+-from django.apps import AppConfig
++from django.apps import AppConfig, apps
+ from django.utils.translation import gettext_lazy as _
+ 
+ 
+@@ -25,8 +25,9 @@
+         post_page_move.connect(autocreate_redirects_on_page_move)
+         page_slug_changed.connect(autocreate_redirects_on_slug_change)
+ 
+-        from wagtail.api.v3.api import api
++        if apps.is_installed("wagtail.api.v3"):
++            from wagtail.api.v3.api import api
+ 
+-        from .api.v3 import router
++            from .api.v3 import router
+ 
+-        api.add_router("/redirects/", router)
++            api.add_router("/redirects/", router)
+--- a/wagtail/documents/apps.py
++++ b/wagtail/documents/apps.py
+@@ -1,4 +1,4 @@
+-from django.apps import AppConfig
++from django.apps import AppConfig, apps
+ from django.db.models import ForeignKey
+ from django.utils.translation import gettext_lazy as _
+ 
+@@ -29,12 +29,13 @@
+ 
+         ReferenceIndex.register_model(Document)
+ 
+-        from .api.v3.registry import register_content_types
++        if apps.is_installed("wagtail.api.v3"):
++            from .api.v3.registry import register_content_types
+ 
+-        register_content_types()
++            register_content_types()
+ 
+-        from wagtail.api.v3.api import api
++            from wagtail.api.v3.api import api
+ 
+-        from .api.v3.router import router
++            from .api.v3.router import router
+ 
+-        api.add_router("/documents/", router)
++            api.add_router("/documents/", router)
+--- a/wagtail/locales/apps.py
++++ b/wagtail/locales/apps.py
+@@ -1,4 +1,4 @@
+-from django.apps import AppConfig
++from django.apps import AppConfig, apps
+ from django.utils.translation import gettext_lazy as _
+ 
+ 
+@@ -8,8 +8,9 @@
+     verbose_name = _("Wagtail locales")
+ 
+     def ready(self):
+-        from wagtail.api.v3.api import api
++        if apps.is_installed("wagtail.api.v3"):
++            from wagtail.api.v3.api import api
+ 
+-        from .api.v3 import router
++            from .api.v3 import router
+ 
+-        api.add_router("/locales/", router)
++            api.add_router("/locales/", router)
+--- a/wagtail/snippets/apps.py
++++ b/wagtail/snippets/apps.py
+@@ -1,4 +1,4 @@
+-from django.apps import AppConfig
++from django.apps import AppConfig, apps
+ from django.db.models.signals import post_migrate
+ from django.utils.translation import gettext_lazy as _
+ 
+@@ -27,12 +27,13 @@
+         # to create the extra permissions.
+         post_migrate.connect(create_extra_permissions, sender=self)
+ 
+-        from .api.v3 import register_content_types
++        if apps.is_installed("wagtail.api.v3"):
++            from .api.v3 import register_content_types
+ 
+-        register_content_types()
++            register_content_types()
+ 
+-        from wagtail.api.v3.api import api
++            from wagtail.api.v3.api import api
+ 
+-        from .api.v3.router import router
++            from .api.v3.router import router
+ 
+-        api.add_router("/snippets/", router)
++            api.add_router("/snippets/", router)
+--- a/wagtail/images/apps.py
++++ b/wagtail/images/apps.py
+@@ -1,4 +1,4 @@
+-from django.apps import AppConfig
++from django.apps import AppConfig, apps
+ from django.db.models import ForeignKey
+ from django.utils.translation import gettext_lazy as _
+ 
+@@ -51,12 +51,13 @@
+ 
+         ReferenceIndex.register_model(Image)
+ 
+-        from .api.v3.registry import register_content_types
++        if apps.is_installed("wagtail.api.v3"):
++            from .api.v3.registry import register_content_types
+ 
+-        register_content_types()
++            register_content_types()
+ 
+-        from wagtail.api.v3.api import api
++            from wagtail.api.v3.api import api
+ 
+-        from .api.v3.router import router
++            from .api.v3.router import router
+ 
+-        api.add_router("/images/", router)
++            api.add_router("/images/", router)
+--- a/wagtail/__init__.py
++++ b/wagtail/__init__.py
+@@ -8,7 +8,8 @@
+ # release must be one of alpha, beta, rc, or final
+ VERSION = (8, 0, 1, "final", 1)
+ 
+-__version__ = get_version(VERSION)
++# 隔离验证构建：回移五处未启用 API v3 时的启动保护，不是官方发布版本。
++__version__ = get_version(VERSION) + "+wb2next.apiv3guard.2"
+ 
+ # Required for npm package for frontend
+ __semver__ = get_semver_version(VERSION)

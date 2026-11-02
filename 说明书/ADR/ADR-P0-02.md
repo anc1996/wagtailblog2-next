@@ -64,3 +64,22 @@
 - 已在 settings 激活 `WAGTAILIMAGES_IMAGE_MODEL="resources.Image"` 与 `WAGTAILDOCS_DOCUMENT_MODEL="resources.Document"`，未引入业务 Page 或旧站资源。
 - 受导入前无外部 IO 守卫的定向装载与模型合同测试已通过；这只证明当前原型装载边界，不证明迁移或真实服务验收。
 - 本节覆盖此前“resources 尚未实现”的当前状态表述；历史记录保留，迁移文件、完整迁移图和 E3 仍未完成。
+
+## P0-DEV-03 实施记录（2026-11-02）
+
+- 已建立 `wagtailblog2.apps.home.apps.HomeConfig`，固定 `label=site_home`，并在项目 settings 注册。
+- `site_home.HomePage` 已作为无额外业务字段的 Wagtail `Page` 子类加入；未覆盖原生生命周期，也未限制未来子页面类型或创建位置。
+- Home 模型/Bootstrap 测试目前被 Wagtail API 页面 schema 启动错误阻断，尚不能据此确认模型注册和完整受守卫装载通过；无迁移文件、无 Site/Locale 数据，未连接真实服务。
+- 本节覆盖此前“site_home AppConfig 尚未实现”的历史状态；完整 E2、迁移图和 E3 仍未完成。
+
+### 恢复验证增量（2026-11-02，04 U40）
+
+- 本节覆盖上面首次启动失败时的验证状态：Home、Identity、Resources、Bootstrap 及守卫合同在独立 Wagtail 8.1rc1 venv 下通过；正式 8.0.1 仍启动失败。完整命令、Mock 和数量见 11 N11。
+- 当前不启用 `wagtail.api.v3`；未来自定义业务 API 优先 DRF，不替换 Wagtail 后台内部接口。本轮只登记边界，不新增 API 或改变正式依赖。
+- 保留 Wagtail 原生 Redirects、Documents、Locale；禁止以删 App、覆盖框架生命周期或虚假 Page 规避启动问题。模型身份、迁移 B 与 E3 门禁不变；隔离通过不等于正式兼容或验收。
+
+### 官方初始化对齐增量（2026-11-02）
+
+- 保留已确认的 `src` 布局和 App label；按官方模板补注册现有 `django_filters`，Home 模板使用原生 label 推导路径 `site_home/home_page.html`。
+- 开发静态资源路由先于 Wagtail 兜底；不采用示例的全媒体目录直出，避免绕过草稿/私有资源边界。原生文档路由保留，公共图片交付仍属 P1。
+- 官方 8.0.1 原版脚手架在同一守卫/Mock 条件下也复现启动错误；本次配置修正不关闭正式依赖兼容门禁，不生成迁移或初始化数据。测试证据见 11 N11。

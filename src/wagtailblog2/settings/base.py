@@ -2,12 +2,13 @@
 WagtailBlog2 基础共享配置 (base.py).
 
 边界与架构原则 (ADR-P0-01 / ADR-P0-02 / ADR-P0-03 / ADR-P0-05 / ADR-P0-06)：
-1. 仅声明核心 Django 与 Wagtail 必须组件，装载身份与公共资源模型，不装载业务 Page；
+1. 装载 Django/Wagtail 核心、身份、公共资源及最小 HomePage，不装载 Blog/Guide；
 2. 默认数据库采用本地独立 SQLite 路径 (var/db.sqlite3)，严禁连接旧站/生产 MySQL；
 3. 默认缓存使用 LocMemCache，严禁连接共享 Redis；
 4. 搜索后端使用 Wagtail 原生数据库搜索，严禁连接共享 Elasticsearch；
 5. AUTH_USER_MODEL 已按 P0-DEV-01 固定；公共资源模型设置按 P0-DEV-02 激活；
-6. 不在启动阶段导入 Celery，根包保持无副作用纯净性。
+6. 不在启动阶段导入 Celery，根包保持无副作用纯净性；
+7. U40：当前不启用 Wagtail API v3，未来自定义业务 API 优先 DRF，本轮不开发接口。
 """
 
 import os
@@ -48,6 +49,8 @@ INSTALLED_APPS: List[str] = [
     "wagtailblog2.apps.identity.apps.IdentityConfig",
     # 公共资源持久身份独立于 Blog/Guide，注册不执行外部 IO。
     "wagtailblog2.apps.resources.apps.ResourcesConfig",
+    # 首页 Page 仅使用 Wagtail 原生生命周期，不初始化 Site/Locale 数据。
+    "wagtailblog2.apps.home.apps.HomeConfig",
 
     # Wagtail 核心与功能组件 (ADR-P0-06)
     "wagtail.contrib.forms",
@@ -65,6 +68,8 @@ INSTALLED_APPS: List[str] = [
     # 支撑与第三方库
     "modelcluster",
     "taggit",
+    # 官方骨架注册此 App，以便原生筛选器发现自己的 widget 模板。
+    "django_filters",
     "rest_framework",
 
     # Django 核心基础应用

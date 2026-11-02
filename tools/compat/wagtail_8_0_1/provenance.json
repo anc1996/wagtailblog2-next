@@ -1,0 +1,28 @@
+{
+  "status": "isolated-experiment-only-not-adopted",
+  "artifact_origin": "P0-BLOCKER-01-20261102",
+  "upstream_repository": "wagtail/wagtail",
+  "upstream_commits": [
+    {
+      "sha": "19ea8b53a660ef65d0e275a03c05dea6118c2f82",
+      "scope": "redirects, documents, locales, snippets startup guards"
+    },
+    {
+      "sha": "123e88ddd5f73378f73ed5c4ce6dc234425db0d0",
+      "scope": "images startup guard only"
+    }
+  ],
+  "patch": {
+    "filename": "wagtail-8.0.1-api-v3-startup-v2.patch",
+    "sha256": "1d91c2dd724b4f9a20f3abbd52f245ccb88040d9ce2fced1d5d7f371b2d3cf75"
+  },
+  "sdist": {
+    "filename": "wagtail-8.0.1.tar.gz",
+    "sha256": "819865a10bce86b16288cfaefa4195b90ffb5e7ac494fb18659e7be099ef386f"
+  },
+  "tested_wheel": {
+    "filename": "wagtail-8.0.1+wb2next.apiv3guard.2-py3-none-any.whl",
+    "sha256": "0a593d987088d3f8ab4a4ca8fae097b61fa931701c6f556542dbcf1f9ca1a5b5",
+    "note": "Hash identifies the tested artifact; a rebuild need not be byte-identical."
+  }
+}

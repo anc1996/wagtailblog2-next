@@ -170,6 +170,7 @@ class ResourcesContractTests(unittest.TestCase):
                 "wagtailblog2",
                 "wagtailblog2.apps.identity",
                 "wagtailblog2.apps.resources",
+                "wagtailblog2.apps.home",
             ],
         )
         self.assertEqual(

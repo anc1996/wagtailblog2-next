@@ -193,7 +193,7 @@ def install_no_io_guard():
 
 
 def main():
-    """Collect only the two approved test modules, after installing the guard."""
+    """先启用守卫，再收集当前获批的探针、装载及模型合同测试。"""
     if len(sys.argv) != 1:
         raise SystemExit("Usage: python -B -m tools.e2_no_io_guard")
     guard = install_no_io_guard()
@@ -205,15 +205,18 @@ def main():
         "test_e2_no_io_guard.py",
         "test_e2_bootstrap.py",
         "test_identity_contract.py",
+        "test_resources_contract.py",
+        "test_home_contract.py",
+        "test_home_scaffold.py",
     ):
         suite.addTests(unittest.defaultTestLoader.discover(str(root / "tests"), filename))
     if guard.violations:
         raise E2IOViolation("E2 test collection recorded a forbidden IO attempt")
     result = unittest.TextTestRunner(verbosity=2, failfast=True).run(suite)
     print(
-        f"Guard probes + Mock-assisted skeleton only; violations={guard.violations}; "
+        f"E2 guard probes and guarded project contract suites; violations={guard.violations}; "
         "SQLite FTS5 and socket IPv6 capabilities explicitly mocked unavailable. "
-        "custom identity User and resource models verified; no project migration graph verified. "
+        "See individual test results; no project migration graph verified. "
         "NOT full P0 E2."
     )
     return 0 if result.wasSuccessful() and guard.active else 1

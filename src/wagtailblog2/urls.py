@@ -12,8 +12,8 @@ WagtailBlog2 核心 URL 路由配置.
 from typing import List, Union
 
 from django.conf import settings
-from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import URLPattern, URLResolver, include, path
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
@@ -23,11 +23,13 @@ urlpatterns: List[Union[URLPattern, URLResolver]] = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
-    # 未来可在此注册获批的 API 路由，如 path("api/v2/", api_router.urls)
-    # Wagtail 页面树统配路由必须放在最后，兜底所有 Page URL
-    path("", include(wagtail_urls)),
+    # U40：未来自定义业务 API 优先 DRF；本轮不注册业务 API 或 Wagtail API v3。
 ]
 
 if settings.DEBUG:
-    # 开发模式下通过 Django 静态文件辅助函数托管本地 media，生产环境严禁由此托管
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # 与官方骨架一致，仅在开发模式提供应用静态文件（包含后台 CSS/JS）。
+    # 不直出整个 MEDIA_ROOT：草稿/私有原件不能绕过资源权限；图片交付留到 P1。
+    urlpatterns += staticfiles_urlpatterns()
+
+# 页面入口始终置于最后；文档继续经过 Wagtail 原生交付逻辑。
+urlpatterns += [path("", include(wagtail_urls))]

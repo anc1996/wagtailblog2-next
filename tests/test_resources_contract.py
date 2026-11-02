@@ -123,15 +123,22 @@ class ResourcesContractTests(unittest.TestCase):
         self.assertEqual(image_field.remote_field.related_name, "renditions")
         self.assertIs(image_field.remote_field.on_delete, models.CASCADE)
 
-        unique_fields = {
-            tuple(constraint.fields)
+        unique_constraints = [
+            constraint
             for constraint in self.Rendition._meta.constraints
             if constraint.__class__.__name__ == "UniqueConstraint"
-        }
-        self.assertIn(
-            ("image", "filter_spec", "focal_point_key"),
-            unique_fields,
-        )
+        ]
+        matching_constraints = [
+            constraint
+            for constraint in unique_constraints
+            if tuple(constraint.fields)
+            == ("image", "filter_spec", "focal_point_key")
+        ]
+        self.assertEqual(len(matching_constraints), 1)
+        # Rendition identity must be unique for every image/filter/focal-key
+        # combination; a conditional constraint would leave duplicate rows
+        # possible for part of the published model state.
+        self.assertIsNone(matching_constraints[0].condition)
 
     def test_document_has_only_native_minimum_contract(self):
         self.assertEqual(

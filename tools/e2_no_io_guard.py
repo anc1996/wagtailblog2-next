@@ -213,7 +213,7 @@ def main():
     print(
         f"Guard probes + Mock-assisted skeleton only; violations={guard.violations}; "
         "SQLite FTS5 and socket IPv6 capabilities explicitly mocked unavailable. "
-        "custom identity User verified; no media models or project migration graph verified. "
+        "custom identity User and resource models verified; no project migration graph verified. "
         "NOT full P0 E2."
     )
     return 0 if result.wasSuccessful() and guard.active else 1

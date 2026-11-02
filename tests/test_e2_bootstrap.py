@@ -80,8 +80,9 @@ class SkeletonBootstrapTests(unittest.TestCase):
                 )
             self.assertIn("modelsearch.W003", stderr.getvalue())
 
-            # P0-DEV-01 has fixed the identity contract; media models and
-            # migrations remain intentionally outside this slice.
+            # P0-DEV-01 fixed identity, and P0-DEV-02 now loads the resource
+            # model identities. Migrations remain intentionally outside this
+            # slice and are not inferred from successful model loading.
             self.assertEqual(settings.AUTH_USER_MODEL, "site_identity.User")
             self.assertEqual(settings.WAGTAILIMAGES_IMAGE_MODEL, "resources.Image")
             self.assertEqual(settings.WAGTAILDOCS_DOCUMENT_MODEL, "resources.Document")

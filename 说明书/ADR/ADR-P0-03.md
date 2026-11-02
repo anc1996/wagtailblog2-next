@@ -55,3 +55,10 @@ U27～U36 本身不替代持久身份批准；本轮用户已另行批准 `site_
 - E3：另获具体隔离空库操作授权后，检查真实 ContentType/权限、迁移历史、后台模型选择与 chooser；保留目标及版本证据。
 - 停止：重复 label、未批准身份、旧历史混入、权限误绑定或生产依赖 fixtures。
 - 回退检查：迁移前修订提案/本人原型；迁移后身份变化必须新专项迁移与授权，不改已应用迁移、不 fake、不删 ContentType 或清旧权限掩盖问题。
+
+## P0-DEV-02 实施记录（2026-11-02）
+
+- `resources` App 身份已按 U38 固定并完成代码装载：`resources.Image`、`resources.Rendition`、`resources.Document`。
+- 自定义模型保留 Wagtail 原生 Collection、`site_identity.User` 上传者、taggit、chooser 与字段合同；tag 反向关系使用资源专用名称，避免与 Wagtail 内置具体模型冲突。
+- 当前验证覆盖 App registry、模型 label、实际 Wagtail resolver、关系与约束；ContentType、权限生成和首次迁移仍未执行。
+- 本节覆盖此前“模型实现尚未完成”的当前状态表述；历史候选与未验证边界继续保留。

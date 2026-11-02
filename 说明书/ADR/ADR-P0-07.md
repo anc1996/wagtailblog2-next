@@ -75,3 +75,10 @@ User 初始 + taggit + core Collection 前序 → resources 初始
 5. **回退检查：**文档/未落库原型可按文件归属撤回；发生 SQL 提交后先核实状态。反向迁移/删库/恢复均非本 ADR 自动授权，不使用 destructive reset 或删除 Mongo 版本补偿。
 
 验收记录必须分别列 E1/E2/E3 的命令、环境、范围、结果和未测项；E3 正确性未证明前，不标记“P0 建库设计实证通过”，不自动进入 P1。
+
+## P0-DEV-02 实施记录（2026-11-02）
+
+- 已完成 `resources` App 与三类资源模型的代码装载、关系/约束合同测试和导入前无外部 IO 验证。
+- 当前仅审查候选依赖方向：`site_identity.User`、taggit、Wagtail Collection 前序 → `resources` 初始模型；这不是已生成的迁移 DAG。
+- 本切片未创建迁移文件、未运行 MigrationLoader、`makemigrations` 或 `migrate`；第三方 squash/replaces、叶节点、真实状态和首次数据库迁移仍待后续 E2/E3 门禁。
+- 本节覆盖此前“resources App 尚未实现”的当前状态，不覆盖完整迁移图验收。

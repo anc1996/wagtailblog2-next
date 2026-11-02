@@ -59,7 +59,8 @@ wsl --exec /root/anaconda3/envs/wagtailblog-test/bin/python -B -m unittest disco
 - 当前 settings 的实际源码路径；
 - `django.setup()`、项目 URL 路由、WSGI/ASGI application 装载；
 - `check` 系统检查及数据库 wrapper 仍没有连接；
-- P0-DEV-01 的 `site_identity.User` 已装载；尚无媒体模型或项目迁移目录。
+- P0-DEV-01 的 `site_identity.User` 与 P0-DEV-02 的 `resources.Image`、
+  `resources.Rendition`、`resources.Document` 已装载；项目仍无迁移目录。
 
 **装载有两个显式、仅测试内生效的能力 Mock：**
 
@@ -74,7 +75,7 @@ wsl --exec /root/anaconda3/envs/wagtailblog-test/bin/python -B -m unittest disco
 测试不放行任何上述 IO；装载期间违规增量必须严格为零。
 结果属于 **守卫负向验证 + Mock 辅助的当前骨架装载**，
 不是未经 Mock 的当前 settings 纯 E2，也不验证 FTS5/IPv6 能力。
-已创建并装载最小自定义 User，但没有创建媒体模型或项目迁移，
+已创建并装载最小自定义 User 与公共资源模型，但没有创建项目迁移，
 也没有构建/验证项目或第三方迁移图，
 更没有验证迁移、真实数据库、Storage、队列、浏览器或真实用户态。
 **不得据此宣布完整 P0 E2、P0 已验收或准入 P1。**

@@ -48,3 +48,13 @@
 - 保留其他贡献者已有的暂存、未暂存、未跟踪和历史删除，不做清理性 reset 或覆盖。
 - 不输出或保存密码、Token、Cookie、私钥、完整敏感请求或服务凭据。
 - 旧文档中的旧仓库路径、分支和代码事实可以出现在 `说明书/archive-历史原始文档/` 或明确的历史来源说明中，不得被当作新站当前状态。
+
+## GitHub 开发、审核、合并与同步流程
+
+- 每个开发切片默认从最新 `origin/main` 建立独立 worktree 和 `feature/*` 分支；主工作目录只保留 `main`、正式项目文件和既有未提交修改，不直接开发新功能。
+- Codex/Terra 负责在批准范围内开发、测试、同步文档、创建增量 commit、推送功能分支并提交 PR；Sol 提供架构合同，Gemini 在明确文件范围内实现，独立 Reviewer 对高风险边界只读复核。
+- PR 必须指向 `main`，只包含一个切片及其必要文档和测试；不得直接向 `main` 提交、推送或 force push。GitHub 显示“可合并”不等于功能验收通过。
+- 远程项目总监依据 PR 的实际代码、文档、测试证据和安全边界给出通过、有条件通过或不通过结论；未经项目总监确认和用户操作，不自动合并或删除分支。
+- PR 合并后，先核对合并状态、合并 SHA 与最新 `origin/main`，再在本地 `main` 上执行 `git fetch origin` 和安全 fast-forward；存在未提交修改时必须先检查归属并建立可验证的 stash 或使用独立 worktree，禁止 reset、clean、rebase、覆盖或重复 apply。
+- 同步完成后必须确认本地 `main` 与 `origin/main` 一致、原有未提交修改完整保留、无冲突，并报告切片、PR、SHA、变更文件、测试结果、Reviewer 结论和遗留问题。stash 备份未经明确确认不得删除。
+- 此流程只规范 Git 协作，不扩大数据库、迁移、MinIO、MongoDB、Redis、Celery、Elasticsearch、部署或其他真实服务操作授权。
